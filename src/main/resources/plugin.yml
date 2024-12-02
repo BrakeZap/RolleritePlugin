@@ -1,0 +1,5 @@
+name: RolleritePlugin
+version: '1.0-SNAPSHOT'
+main: xyz.brakezap.rolleritePlugin.RolleritePlugin
+api-version: '1.21'
+authors: [ BrakeZap ]
