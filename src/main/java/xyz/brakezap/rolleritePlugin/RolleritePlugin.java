@@ -6,6 +6,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.brakezap.rolleritePlugin.commands.FixCommand;
 import xyz.brakezap.rolleritePlugin.commands.TrashCommand;
 import xyz.brakezap.rolleritePlugin.events.InventoryListener;
 
@@ -18,6 +19,7 @@ public final class RolleritePlugin extends JavaPlugin {
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final Commands commands = event.registrar();
             commands.register("trash", "Open a trash menu.", new TrashCommand());
+            commands.register("fix", "Fix the item in your hand.", new FixCommand());
         });
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
     }
