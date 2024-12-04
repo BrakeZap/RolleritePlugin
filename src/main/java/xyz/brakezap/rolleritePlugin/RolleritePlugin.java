@@ -7,7 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.brakezap.rolleritePlugin.commands.FixCommand;
+import xyz.brakezap.rolleritePlugin.commands.GodCommand;
 import xyz.brakezap.rolleritePlugin.commands.TrashCommand;
+import xyz.brakezap.rolleritePlugin.events.GodEvents;
 import xyz.brakezap.rolleritePlugin.events.InventoryListener;
 
 public final class RolleritePlugin extends JavaPlugin {
@@ -20,8 +22,10 @@ public final class RolleritePlugin extends JavaPlugin {
             final Commands commands = event.registrar();
             commands.register("trash", "Open a trash menu.", new TrashCommand());
             commands.register("fix", "Fix the item in your hand.", new FixCommand());
+            commands.register("god", "Give a player god mode.", new GodCommand());
         });
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GodEvents(), this);
     }
 
     @Override
