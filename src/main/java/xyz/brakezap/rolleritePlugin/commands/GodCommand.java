@@ -3,6 +3,7 @@ package xyz.brakezap.rolleritePlugin.commands;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
 
@@ -12,14 +13,20 @@ import java.util.List;
 
 public class GodCommand implements BasicCommand {
 
-    public static HashSet<Player> hasGodMode = new HashSet<>();
+    public static HashSet<CommandSender> hasGodMode = new HashSet<>();
 
     @Override
     public void execute(CommandSourceStack commandSourceStack, String[] args) {
-        if (!(commandSourceStack.getSender() instanceof Player)) {
-            commandSourceStack.getSender().sendMessage("Cannot execute the trash command as console!");
+        if (!(commandSourceStack.getSender() instanceof Player) && args.length == 0) {
+            commandSourceStack.getSender().sendMessage("/god <player>");
             return;
         }
+
+        if (!(commandSourceStack.getSender() instanceof Player) && args.length > 1) {
+            commandSourceStack.getSender().sendMessage("/god <player>");
+            return;
+        }
+
 
         if (args.length > 1) {
             //TODO: LOCALE
@@ -27,7 +34,8 @@ public class GodCommand implements BasicCommand {
             return;
         }
 
-        Player p = (Player) commandSourceStack.getSender();
+        CommandSender p = commandSourceStack.getSender();
+
 
         if (args.length == 0) {
             if (hasGodMode.contains(p)){
@@ -41,6 +49,7 @@ public class GodCommand implements BasicCommand {
             }
             return;
         }
+
         Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) {
             //TODO: LOCALE
@@ -51,10 +60,14 @@ public class GodCommand implements BasicCommand {
             hasGodMode.remove(target);
             //TODO: LOCALE
             p.sendMessage("God mode turned off for " + target.getName() + "!");
+            if (!p.getName().equalsIgnoreCase(target.getName()))
+                target.sendMessage("God mode turned off for " + target.getName() + "!");
         }else {
             hasGodMode.add(target);
             //TODO: LOCALE
             p.sendMessage("God mode turned on for " + target.getName() + "!");
+            if (!p.getName().equalsIgnoreCase(target.getName()))
+                target.sendMessage("God mode turned on for " + target.getName() + "!");
         }
 
     }
