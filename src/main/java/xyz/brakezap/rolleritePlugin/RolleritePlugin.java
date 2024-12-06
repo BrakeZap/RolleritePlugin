@@ -6,9 +6,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.brakezap.rolleritePlugin.commands.FixCommand;
-import xyz.brakezap.rolleritePlugin.commands.GodCommand;
-import xyz.brakezap.rolleritePlugin.commands.TrashCommand;
+import xyz.brakezap.rolleritePlugin.commands.*;
 import xyz.brakezap.rolleritePlugin.events.GodEvents;
 import xyz.brakezap.rolleritePlugin.events.InventoryListener;
 
@@ -23,6 +21,8 @@ public final class RolleritePlugin extends JavaPlugin {
             commands.register("trash", "Open a trash menu.", new TrashCommand());
             commands.register("fix", "Fix the item in your hand.", new FixCommand());
             commands.register("god", "Give a player god mode.", new GodCommand());
+            commands.register("enderchest", "Open a player's enderchest for them.", new EChestCommand());
+            commands.register("gamemode", "Set a player's gamemode.", new GamemodeCommand());
         });
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new GodEvents(), this);
