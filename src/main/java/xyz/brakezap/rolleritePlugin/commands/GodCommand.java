@@ -2,6 +2,8 @@ package xyz.brakezap.rolleritePlugin.commands;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import xyz.brakezap.rolleritePlugin.RolleritePlugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,47 +29,47 @@ public class GodCommand implements BasicCommand {
             return;
         }
 
-
         if (args.length > 1) {
-            //TODO: LOCALE
             commandSourceStack.getSender().sendMessage("/god [player]");
             return;
         }
 
         CommandSender p = commandSourceStack.getSender();
 
-
         if (args.length == 0) {
-            if (hasGodMode.contains(p)){
+            if (hasGodMode.contains(p)) {
                 hasGodMode.remove(p);
-                //TODO: LOCALE
-                p.sendMessage("God mode turned off!");
-            }else {
+
+                p.sendMessage(RolleritePlugin.instance.getLangMessage("god-command-off-message"));
+            } else {
                 hasGodMode.add(p);
-                //TODO: LOCALE
-                p.sendMessage("God mode turned on!");
+
+                p.sendMessage(RolleritePlugin.instance.getLangMessage("god-command-on-message"));
             }
             return;
         }
 
         Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) {
-            //TODO: LOCALE
-            p.sendMessage("That player is not online!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("player-not-online-message"));
             return;
         }
-        if (hasGodMode.contains(target)){
+        if (hasGodMode.contains(target)) {
             hasGodMode.remove(target);
-            //TODO: LOCALE
-            p.sendMessage("God mode turned off for " + target.getName() + "!");
+            p.sendMessage(
+                    RolleritePlugin.instance.getLangMessage("god-command-off-target-message") + target.getName() + "!");
             if (!p.getName().equalsIgnoreCase(target.getName()))
-                target.sendMessage("God mode turned off for " + target.getName() + "!");
-        }else {
+                target.sendMessage(
+                        RolleritePlugin.instance.getLangMessage("god-command-off-target-message") + target.getName()
+                                + "!");
+        } else {
             hasGodMode.add(target);
-            //TODO: LOCALE
-            p.sendMessage("God mode turned on for " + target.getName() + "!");
+            p.sendMessage(
+                    RolleritePlugin.instance.getLangMessage("god-command-on-target-message") + target.getName() + "!");
             if (!p.getName().equalsIgnoreCase(target.getName()))
-                target.sendMessage("God mode turned on for " + target.getName() + "!");
+                target.sendMessage(
+                        RolleritePlugin.instance.getLangMessage("god-command-on-target-message") + target.getName()
+                                + "!");
         }
 
     }

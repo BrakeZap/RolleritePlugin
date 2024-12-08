@@ -9,6 +9,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+import xyz.brakezap.rolleritePlugin.RolleritePlugin;
 import xyz.brakezap.rolleritePlugin.guis.PlayerInventoryHolder;
 
 import java.util.Collection;
@@ -17,7 +18,8 @@ public class OpenInvCommand implements BasicCommand {
     @Override
     public void execute(CommandSourceStack commandSourceStack, String[] args) {
         if (!(commandSourceStack.getSender() instanceof Player)) {
-            commandSourceStack.getSender().sendMessage("Cannot execute openinv command using console!");
+            commandSourceStack.getSender()
+                    .sendMessage(RolleritePlugin.instance.getLangMessage("openinv-command-console-message"));
             return;
         }
 
@@ -31,16 +33,15 @@ public class OpenInvCommand implements BasicCommand {
         Player target = Bukkit.getPlayer(args[0]);
 
         if (target == null) {
-            p.sendMessage("That player is not online!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("player-not-online-message"));
             return;
         }
 
         if (target.getName().equalsIgnoreCase(p.getName())) {
-            p.sendMessage("You can't open your own inventory!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("openinv-command-same-message"));
             return;
         }
 
-        // TODO: Locale here
         p.openInventory(new PlayerInventoryHolder(target).getInventory());
     }
 

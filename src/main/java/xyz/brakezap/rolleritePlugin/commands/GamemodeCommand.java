@@ -2,13 +2,13 @@ package xyz.brakezap.rolleritePlugin.commands;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import xyz.brakezap.rolleritePlugin.RolleritePlugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.jspecify.annotations.Nullable;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -32,56 +32,53 @@ public class GamemodeCommand implements BasicCommand {
             return;
         }
         if (args.length == 0) {
-            //TODO: LOCALE
             commandSourceStack.getSender().sendMessage("/gamemode <type> [player]");
             return;
         }
 
         if (args.length > 2) {
-            //TODO: LOCALE
             commandSourceStack.getSender().sendMessage("/gamemode <type> [player]");
             return;
         }
 
         CommandSender p = commandSourceStack.getSender();
 
-
         if (args.length == 1) {
             Player player = (Player) p;
             GameMode mode;
             try {
                 mode = GameMode.valueOf(args[0].toUpperCase());
-            }catch (IllegalArgumentException e){
-                p.sendMessage("You must specify a correct gamemode!");
+            } catch (IllegalArgumentException e) {
+                p.sendMessage(RolleritePlugin.instance.getLangMessage("gamemode-command-invalid-message"));
                 return;
             }
 
             player.setGameMode(mode);
 
-            //TODO: LOCALE
-            p.sendMessage("Setting gamemode to: "+ mode.name().toLowerCase());
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("gamemode-command-set-message")
+                    + mode.name().toLowerCase());
             return;
         }
 
         Player target = Bukkit.getPlayerExact(args[1]);
         if (target == null) {
-            //TODO: LOCALE
-            p.sendMessage("That player is not online!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("player-not-online-message"));
             return;
         }
 
         GameMode mode;
         try {
             mode = GameMode.valueOf(args[0].toUpperCase());
-        }catch (IllegalArgumentException e){
-            p.sendMessage("You must specify a correct gamemode!");
+        } catch (IllegalArgumentException e) {
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("gamemode-command-invalid-message"));
             return;
         }
 
-        //TODO: LOCALE
-        p.sendMessage("Setting " + target.getName() + "'s " + "gamemode to: "+ mode.name().toLowerCase());
+        p.sendMessage(
+                RolleritePlugin.instance.getLangMessage("gamemode-command-set-message") + mode.name().toLowerCase());
         if (!p.getName().equalsIgnoreCase(target.getName()))
-            target.sendMessage("Setting gamemode to: "+ mode.name().toLowerCase());
+            target.sendMessage(RolleritePlugin.instance.getLangMessage("gamemode-command-set-message")
+                    + mode.name().toLowerCase());
 
         target.setGameMode(mode);
     }

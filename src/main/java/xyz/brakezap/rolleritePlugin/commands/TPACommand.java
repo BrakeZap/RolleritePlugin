@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -25,14 +24,14 @@ public class TPACommand implements BasicCommand {
     @Override
     public void execute(CommandSourceStack commandSourceStack, String[] args) {
         if (!(commandSourceStack.getSender() instanceof Player)) {
-            commandSourceStack.getSender().sendMessage("Console cannot use this command!");
+            commandSourceStack.getSender()
+                    .sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-console-message"));
             return;
         }
 
         Player p = (Player) commandSourceStack.getSender();
 
         if (args.length == 0 || args.length > 1) {
-            // TODO: LOCALE
             p.sendMessage("/tpa <player | accept | deny>");
             return;
         }
@@ -40,52 +39,47 @@ public class TPACommand implements BasicCommand {
         if (args[0].equalsIgnoreCase(TPARequest.Request.ACCEPT.name())) {
             TPARequest req = findOpenRequests(p.getUniqueId());
             if (req == null) {
-                // TODO: LOCALE
-                p.sendMessage("No active tpa requests!");
+                p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-no-requests-message"));
                 return;
             }
             req.getTask().cancel();
             pendingRequests.remove(req);
 
-            // TODO: LOCALE
             Bukkit.getPlayer(req.getSourcePlayer()).teleport(Bukkit.getPlayer(req.getTargetPlayer()));
-            p.sendMessage("Accepting tpa request...");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-accept-message"));
             return;
         }
 
         if (args[0].equalsIgnoreCase(TPARequest.Request.DENY.name())) {
             TPARequest req = findOpenRequests(p.getUniqueId());
             if (req == null) {
-                // TODO: LOCALE
-                p.sendMessage("No active tpa requests!");
+                p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-no-requests-message"));
                 return;
             }
             req.getTask().cancel();
             pendingRequests.remove(req);
 
-            // TODO: LOCALE
-            p.sendMessage("Denying tpa request...");
-            Bukkit.getPlayer(req.getSourcePlayer()).sendMessage("Tpa request denied!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-deny-message"));
+            Bukkit.getPlayer(req.getSourcePlayer())
+                    .sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-denied-message"));
             return;
         }
 
         Player target = Bukkit.getPlayerExact(args[0]);
 
         if (target == null) {
-            // TODO: Locale
-            p.sendMessage("That player is not online!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("player-not-online-message"));
             return;
         }
 
         if (target.getUniqueId().equals(p.getUniqueId())) {
-            // TODO: LOCALE
-            p.sendMessage("You can't tpa to yourself!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-same-message"));
             return;
         }
         TPARequest req = new TPARequest(p.getUniqueId(), target.getUniqueId());
 
         if (hasRequested(p.getUniqueId())) {
-            p.sendMessage("You already have a pending tpa request!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-pending-message"));
             return;
         }
 
@@ -93,19 +87,21 @@ public class TPACommand implements BasicCommand {
             @Override
             public void run() {
                 pendingRequests.remove(req);
-                // TODO: LOCALE
-                p.sendMessage("TPA request to: " + target.getName() + " expired.");
-                target.sendMessage("Tpa request from " + p.getName() + " expired.");
+
+                p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-expire-to-message")
+                        + target.getName() + " expired.");
+                target.sendMessage(
+                        RolleritePlugin.instance.getLangMessage("tpa-command-expire-from-message") + p.getName()
+                                + " expired.");
             }
         };
         req.setTask(task);
         task.runTaskLater(RolleritePlugin.instance, 20 * 10);
         pendingRequests.add(req);
 
-        // TODO: ADD LOCALE
-
-        p.sendMessage("Sending tpa request...");
-        target.sendMessage("Incoming tpa request from: " + p.getName() + ". " + "Please use /tpa accept or /tpa deny.");
+        p.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-send-message"));
+        target.sendMessage(RolleritePlugin.instance.getLangMessage("tpa-command-incoming-message") + p.getName() + ". "
+                + "Please use /tpa accept or /tpa deny.");
     }
 
     @Override

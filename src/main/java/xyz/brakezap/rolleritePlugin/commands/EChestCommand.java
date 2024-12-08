@@ -2,6 +2,8 @@ package xyz.brakezap.rolleritePlugin.commands;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import xyz.brakezap.rolleritePlugin.RolleritePlugin;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 public class EChestCommand implements BasicCommand {
@@ -26,37 +27,30 @@ public class EChestCommand implements BasicCommand {
             return;
         }
 
-
         if (args.length > 1) {
-            //TODO: LOCALE
             commandSourceStack.getSender().sendMessage("/enderchest [player]");
             return;
         }
 
         CommandSender p = commandSourceStack.getSender();
 
-
         if (args.length == 0) {
             Player player = (Player) p;
             Inventory eChest = player.getEnderChest();
             player.openInventory(eChest);
-            //TODO: LOCALE
-            p.sendMessage("Opening enderchest...");
             return;
         }
 
         Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) {
-            //TODO: LOCALE
-            p.sendMessage("That player is not online!");
+            p.sendMessage(RolleritePlugin.instance.getLangMessage("player-not-online-message"));
             return;
         }
 
-
-        //TODO: LOCALE
-        p.sendMessage("Enderchest opened for " + target.getName() + "!");
+        p.sendMessage(RolleritePlugin.instance.getLangMessage("echest-command-open-for-message") + target.getName());
         if (!p.getName().equalsIgnoreCase(target.getName()))
-            target.sendMessage("Enderchest opened for " + target.getName() + "!");
+            target.sendMessage(
+                    RolleritePlugin.instance.getLangMessage("echest-command-open-for-message") + target.getName());
 
         Inventory eChest = target.getEnderChest();
         target.openInventory(eChest);

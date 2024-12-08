@@ -1,7 +1,5 @@
 package xyz.brakezap.rolleritePlugin.guis;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -14,7 +12,7 @@ public class TrashInventory implements InventoryHolder {
     private final Inventory inventory;
 
     public TrashInventory(Player p) {
-        this.inventory = Bukkit.createInventory(p, 27, text("Trash").color(NamedTextColor.GREEN).toBuilder().build());
+        this.inventory = Bukkit.createInventory(this, 27, text("Trash").toBuilder().build());
     }
 
     @Override
