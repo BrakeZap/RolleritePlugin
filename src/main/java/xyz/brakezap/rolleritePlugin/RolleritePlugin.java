@@ -26,6 +26,7 @@ public final class RolleritePlugin extends JavaPlugin {
             commands.register("enderchest", "Open a player's enderchest for them.", new EChestCommand());
             commands.register("gamemode", "Set a player's gamemode.", new GamemodeCommand());
             commands.register("tpa", "Send a teleport request to the specified player.", new TPACommand());
+            commands.register("openinv", "Open a player's inventory to view or edit it.", new OpenInvCommand());
         });
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         Bukkit.getPluginManager().registerEvents(new GodEvents(), this);
